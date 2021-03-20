@@ -1,3 +1,4 @@
+from colorama import Fore
 from IPython.display import clear_output
 
 
@@ -5,15 +6,15 @@ def display_board(board):
     clear_output()
 
     print('   |   |')
-    print(' ' + board[1] + ' | ' + board[2] + ' | ' + board[3])
+    print(' ' + board[1] + '  | ' + board[2] + '  | ' + board[3])
     print('   |   |')
     print('-----------')
     print('   |   |')
-    print(' ' + board[4] + ' | ' + board[5] + ' | ' + board[6])
+    print(' ' + board[4] + '  | ' + board[5] + '  | ' + board[6])
     print('   |   |')
     print('-----------')
     print('   |   |')
-    print(' ' + board[7] + ' | ' + board[8] + ' | ' + board[9])
+    print(' ' + board[7] + '  | ' + board[8] + '  | ' + board[9])
     print('   |   |')
 
 
@@ -21,7 +22,7 @@ def player_input():
     marker = ''
 
     while not (marker == 'X' or marker == 'O'):
-        marker = input('Player 1: Do you want to play X or O ?').upper()
+        marker = input('Player 1: Do you want to play X or O? \n').upper()
 
     if marker == 'X':
         return ('X', 'O')
@@ -69,30 +70,30 @@ def player_choice(board):
     position = 0
 
     while position not in [1, 2, 3, 4, 5, 6, 7, 8, 9] or not space_check(board, position):
-        position = int(input('Choose your next position 1-9 '))
+        try:
+            position = int(input('Choose your next position 1-9 '))
+        except ValueError:
+            print(Fore.RED + 'Must be an integer!')
+        if position in [1, 2, 3, 4, 5, 6, 7, 8, 9] and not space_check(board, position):
+            print(Fore.RED + 'This position has already taken! Choose another one!')
 
     return position
 
 
 def replay():
-    return input('Do you want to play again? Enter Yes or No').lower().startswith('y')
+    return input('Do you want to play again? Enter Yes or No\n').lower().startswith('y')
 
 
-print('Welcome to Tic Tac Toe game!')
+print(Fore.YELLOW + 'Welcome to Tic Tac Toe game!')
 
 while True:
 
     theBoard = [''] * 10
     player1_marker, player2_marker = player_input()
     turn = choose_first()
-    print(turn + ' will go first!')
+    print(Fore.BLUE + turn + ' will go first!')
 
-    play_game = input('Are you ready to play? Enter Yes or No')
-
-    if play_game.lower().startswith('y'):
-        game_on = True
-    else:
-        game_on = False
+    game_on = True
 
     while game_on:
         if turn == 'Player 1':
@@ -103,12 +104,12 @@ while True:
 
             if win_check(theBoard, player1_marker):
                 display_board(theBoard)
-                print('Congratulations, Player 1! You has won the game!')
+                print(Fore.GREEN + 'Congratulations, Player 1! You has won the game!')
                 game_on = False
             else:
                 if full_board_check(theBoard):
                     display_board(theBoard)
-                    print('The game is draw!')
+                    print(Fore.BLUE + 'The game is draw!')
                     break
                 else:
                     turn = 'Player 2'
@@ -120,12 +121,12 @@ while True:
 
             if win_check(theBoard, player2_marker):
                 display_board(theBoard)
-                print('Congratulations, Player 2! You has won the game!')
+                print(Fore.GREEN + 'Congratulations, Player 2! You has won the game!')
                 game_on = False
             else:
                 if full_board_check(theBoard):
                     display_board(theBoard)
-                    print('The game is draw!')
+                    print(Fore.BLUE + 'The game is draw!')
                     break
                 else:
                     turn = 'Player 1'
